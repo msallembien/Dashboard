@@ -12,15 +12,16 @@ class Application extends Model
         'name',
         'description',
         'url',
+        'color',
         'icon',
         'category',
-        'internal',
-        'active',
+        'is_internal',
+        'is_active',
     ];
 
     protected $casts = [
-        'internal' => 'boolean',
-        'active' => 'boolean',
+        'is_internal' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public function roles(): BelongsToMany

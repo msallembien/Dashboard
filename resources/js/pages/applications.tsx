@@ -7,11 +7,12 @@ type Application = {
     id: number;
     name: string;
     description: string | null;
-    url: string;
+    url: string | null;
     icon: string | null;
+    color: string | null;
     category: string | null;
-    internal: boolean;
-    active: boolean;
+    is_internal: boolean;
+    is_active: boolean;
     favorites: {
         id: number;
         user_id: number;
@@ -36,13 +37,11 @@ export default function Applications({
         }
 
         return applications.filter((application) =>
-            [
-                application.name,
-                application.description,
-                application.category,
-            ]
+            [application.name, application.category]
                 .filter(Boolean)
-                .some((field) => field!.toLowerCase().includes(value)),
+                .some((field) =>
+                    field!.toLowerCase().includes(value),
+                ),
         );
     }, [applications, search]);
 
@@ -51,90 +50,103 @@ export default function Applications({
             <Head title="Applications" />
 
             <div className="space-y-8">
+                {/* Header */}
                 <div>
                     <h1 className="text-2xl font-semibold tracking-tight">
                         Applications
                     </h1>
 
-                    <p className="text-muted-foreground">
+                    <p className="mt-1 text-muted-foreground">
                         Retrouvez les applications auxquelles vous avez accès.
                     </p>
                 </div>
 
+                {/* Recherche */}
                 <div className="relative max-w-xl">
-                    <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+                    <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
 
                     <Input
                         value={search}
-                        onChange={(event) => setSearch(event.target.value)}
+                        onChange={(event) =>
+                            setSearch(event.target.value)
+                        }
                         placeholder="Rechercher une application..."
-                        className="pl-9"
+                        className="h-11 pl-9"
                     />
                 </div>
 
+                {/* Applications */}
                 {filteredApplications.length === 0 ? (
-                    <div className="rounded-lg border p-8 text-center text-sm text-muted-foreground">
+                    <div className="rounded-xl border p-10 text-center text-sm text-muted-foreground">
                         {search
                             ? 'Aucune application ne correspond à votre recherche.'
                             : 'Aucune application disponible.'}
                     </div>
                 ) : (
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                         {filteredApplications.map((application) => {
                             const isFavorite =
                                 application.favorites.length > 0;
 
+                            const backgroundColor =
+                                application.color || '#64748B';
+
                             return (
                                 <a
                                     key={application.id}
-                                    href={application.url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="group relative rounded-xl border p-5 transition hover:bg-muted/50"
+                                    href={application.url ?? '#'}
+                                    target={
+                                        application.url
+                                            ? '_blank'
+                                            : undefined
+                                    }
+                                    rel={
+                                        application.url
+                                            ? 'noreferrer'
+                                            : undefined
+                                    }
+                                    className="group relative aspect-square overflow-hidden rounded-2xl p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg"
+                                    style={{
+                                        backgroundColor,
+                                    }}
                                 >
-                                    <div className="flex items-start justify-between gap-4">
-                                        <div className="flex items-center gap-3">
-                                            {application.icon ? (
-                                                <img
-                                                    src={application.icon}
-                                                    alt=""
-                                                    className="size-10 rounded-lg object-contain"
-                                                />
-                                            ) : (
-                                                <div className="flex size-10 items-center justify-center rounded-lg border text-sm font-semibold">
-                                                    {application.name
-                                                        .charAt(0)
-                                                        .toUpperCase()}
-                                                </div>
-                                            )}
-
-                                            <div>
-                                                <h2 className="font-semibold">
-                                                    {application.name}
-                                                </h2>
-
-                                                {application.category && (
-                                                    <p className="text-xs text-muted-foreground">
-                                                        {application.category}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-
+                                    {/* Favori */}
+                                    <div className="absolute top-3 right-3">
                                         <Star
                                             className={
                                                 isFavorite
-                                                    ? 'size-5 fill-current'
-                                                    : 'text-muted-foreground size-5'
+                                                    ? 'size-5 fill-white text-white'
+                                                    : 'size-5 text-white/60 opacity-0 transition group-hover:opacity-100'
                                             }
                                         />
                                     </div>
 
-                                    {application.description && (
-                                        <p className="mt-4 line-clamp-2 text-sm text-muted-foreground">
-                                            {application.description}
-                                        </p>
-                                    )}
+                                    {/* Contenu */}
+                                    <div className="flex h-full flex-col items-center justify-center">
+                                        {application.icon ? (
+                                            <img
+                                                src={
+                                                    application.icon.startsWith(
+                                                        '/storage/',
+                                                    )
+                                                        ? application.icon
+                                                        : `/storage/${application.icon}`
+                                                }
+                                                alt=""
+                                                className="size-16 rounded-2xl object-contain drop-shadow-md transition duration-200 group-hover:scale-105"
+                                            />
+                                        ) : (
+                                            <div className="flex size-16 items-center justify-center rounded-2xl bg-white/20 text-2xl font-bold text-white shadow-sm">
+                                                {application.name
+                                                    .charAt(0)
+                                                    .toUpperCase()}
+                                            </div>
+                                        )}
+
+                                        <h2 className="mt-4 max-w-full truncate text-center text-sm font-semibold text-white">
+                                            {application.name}
+                                        </h2>
+                                    </div>
                                 </a>
                             );
                         })}
