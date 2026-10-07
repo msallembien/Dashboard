@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { Home, Mail, Users, LayoutGrid } from 'lucide-react';
+import { Home, Mail, Users, LayoutGrid, Settings } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -13,13 +13,13 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { home } from '@/routes';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Accueil',
-        href: dashboard(),
+        href: home(),
         icon: Home,
     },
     {
@@ -31,6 +31,11 @@ const mainNavItems: NavItem[] = [
         title: 'Collaborateurs',
         href: '/collaborateurs',
         icon: Users,
+    },
+        {
+        title: 'Administration',
+        href: '/admin/applications',
+        icon: Settings,
     },
 ];
 
@@ -49,7 +54,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={home()} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
