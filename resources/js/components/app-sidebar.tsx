@@ -1,6 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { Home, Mail, Users, LayoutGrid, Settings } from 'lucide-react';
-import AppLogo from '@/components/app-logo';
+import { Home, LayoutGrid, Mail, Settings, Users } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -32,7 +31,7 @@ const mainNavItems: NavItem[] = [
         href: '/collaborateurs',
         icon: Users,
     },
-        {
+    {
         title: 'Administration',
         href: '/admin/applications',
         icon: Settings,
@@ -49,25 +48,48 @@ const footerNavItems: NavItem[] = [
 
 export function AppSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+        <Sidebar
+            collapsible="icon"
+            variant="inset"
+            className="p-2"
+        >
+            <SidebarHeader className="px-1 pt-1">
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
+                        <SidebarMenuButton
+                            size="lg"
+                            asChild
+                            className="h-12 rounded-xl px-3 transition-colors hover:bg-muted"
+                        >
                             <Link href={home()} prefetch>
-                                <AppLogo />
+                                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
+                                    D
+                                </div>
+
+                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                    <span className="truncate font-semibold">
+                                        Dashboard
+                                    </span>
+                                    <span className="truncate text-xs text-muted-foreground">
+                                        Espace collaborateur
+                                    </span>
+                                </div>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent>
+            <SidebarContent className="px-1 py-3">
                 <NavMain items={mainNavItems} />
             </SidebarContent>
 
-            <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+            <SidebarFooter className="px-1 pb-1">
+                <NavFooter
+                    items={footerNavItems}
+                    className="mb-2"
+                />
+
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

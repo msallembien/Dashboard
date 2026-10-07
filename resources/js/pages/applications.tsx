@@ -49,109 +49,105 @@ export default function Applications({
         <>
             <Head title="Applications" />
 
-            <div className="space-y-8">
-                {/* Header */}
-                <div>
-                    <h1 className="text-2xl font-semibold tracking-tight">
-                        Applications
-                    </h1>
-
-                    <p className="mt-1 text-muted-foreground">
-                        Retrouvez les applications auxquelles vous avez accès.
-                    </p>
-                </div>
-
+            <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-8">
                 {/* Recherche */}
-                <div className="relative max-w-xl">
-                    <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                <div className="w-full max-w-2xl">
+                    <div className="relative">
+                        <Search className="absolute top-1/2 left-4 size-5 -translate-y-1/2 text-muted-foreground" />
 
-                    <Input
-                        value={search}
-                        onChange={(event) =>
-                            setSearch(event.target.value)
-                        }
-                        placeholder="Rechercher une application..."
-                        className="h-11 pl-9"
-                    />
+                        <Input
+                            value={search}
+                            onChange={(event) =>
+                                setSearch(event.target.value)
+                            }
+                            placeholder="Rechercher une application..."
+                            className="h-12 rounded-xl border-muted-foreground/20 bg-background pl-11 shadow-sm"
+                        />
+                    </div>
                 </div>
 
                 {/* Applications */}
-                {filteredApplications.length === 0 ? (
-                    <div className="rounded-xl border p-10 text-center text-sm text-muted-foreground">
-                        {search
-                            ? 'Aucune application ne correspond à votre recherche.'
-                            : 'Aucune application disponible.'}
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                        {filteredApplications.map((application) => {
-                            const isFavorite =
-                                application.favorites.length > 0;
+                <div className="mt-14 w-full">
+                    {filteredApplications.length === 0 ? (
+                        <div className="py-16 text-center text-sm text-muted-foreground">
+                            {search
+                                ? 'Aucune application ne correspond à votre recherche.'
+                                : 'Aucune application disponible.'}
+                        </div>
+                    ) : (
+                        <div className="flex flex-wrap justify-center gap-5">
+                            {filteredApplications.map((application) => {
+                                const isFavorite =
+                                    application.favorites.length > 0;
 
-                            const backgroundColor =
-                                application.color || '#64748B';
+                                const backgroundColor =
+                                    application.color || '#64748B';
 
-                            return (
-                                <a
-                                    key={application.id}
-                                    href={application.url ?? '#'}
-                                    target={
-                                        application.url
-                                            ? '_blank'
-                                            : undefined
-                                    }
-                                    rel={
-                                        application.url
-                                            ? 'noreferrer'
-                                            : undefined
-                                    }
-                                    className="group relative aspect-square overflow-hidden rounded-2xl p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg"
-                                    style={{
-                                        backgroundColor,
-                                    }}
-                                >
-                                    {/* Favori */}
-                                    <div className="absolute top-3 right-3">
-                                        <Star
-                                            className={
-                                                isFavorite
-                                                    ? 'size-5 fill-white text-white'
-                                                    : 'size-5 text-white/60 opacity-0 transition group-hover:opacity-100'
-                                            }
-                                        />
-                                    </div>
+                                return (
+                                    <a
+                                        key={application.id}
+                                        href={application.url ?? '#'}
+                                        target={
+                                            application.url
+                                                ? '_blank'
+                                                : undefined
+                                        }
+                                        rel={
+                                            application.url
+                                                ? 'noreferrer'
+                                                : undefined
+                                        }
+                                        className="group relative flex w-36 flex-col items-center rounded-2xl p-4 transition duration-200 hover:-translate-y-1 hover:bg-muted/50"
+                                    >
+                                        {/* Application */}
+                                        <div
+                                            className="relative flex size-24 items-center justify-center overflow-hidden rounded-2xl shadow-sm transition duration-200 group-hover:shadow-md"
+                                            style={{
+                                                backgroundColor,
+                                            }}
+                                        >
+                                            {application.icon ? (
+                                                <img
+                                                    src={
+                                                        application.icon.startsWith(
+                                                            '/storage/',
+                                                        )
+                                                            ? application.icon
+                                                            : `/storage/${application.icon}`
+                                                    }
+                                                    alt=""
+                                                    className="size-14 rounded-xl object-contain drop-shadow-md transition duration-200 group-hover:scale-110"
+                                                />
+                                            ) : (
+                                                <span className="text-3xl font-bold text-white">
+                                                    {application.name
+                                                        .charAt(0)
+                                                        .toUpperCase()}
+                                                </span>
+                                            )}
 
-                                    {/* Contenu */}
-                                    <div className="flex h-full flex-col items-center justify-center">
-                                        {application.icon ? (
-                                            <img
-                                                src={
-                                                    application.icon.startsWith(
-                                                        '/storage/',
-                                                    )
-                                                        ? application.icon
-                                                        : `/storage/${application.icon}`
-                                                }
-                                                alt=""
-                                                className="size-16 rounded-2xl object-contain drop-shadow-md transition duration-200 group-hover:scale-105"
-                                            />
-                                        ) : (
-                                            <div className="flex size-16 items-center justify-center rounded-2xl bg-white/20 text-2xl font-bold text-white shadow-sm">
-                                                {application.name
-                                                    .charAt(0)
-                                                    .toUpperCase()}
+                                            {/* Favori */}
+                                            <div className="absolute top-2 right-2">
+                                                <Star
+                                                    className={
+                                                        isFavorite
+                                                            ? 'size-4 fill-white text-white'
+                                                            : 'size-4 text-white/70 opacity-0 transition group-hover:opacity-100'
+                                                    }
+                                                />
                                             </div>
-                                        )}
+                                        </div>
 
-                                        <h2 className="mt-4 max-w-full truncate text-center text-sm font-semibold text-white">
+                                        {/* Nom */}
+                                        <span className="mt-3 w-full truncate text-center text-sm font-medium">
                                             {application.name}
-                                        </h2>
-                                    </div>
-                                </a>
-                            );
-                        })}
-                    </div>
-                )}
+                                        </span>
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
             </div>
         </>
     );

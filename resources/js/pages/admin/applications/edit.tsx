@@ -3,7 +3,6 @@ import {
     ArrowLeft,
     Check,
     ImagePlus,
-    Plus,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -65,6 +64,7 @@ export default function EditApplication({
     categories,
 }: EditApplicationProps) {
     const [newCategory, setNewCategory] = useState(false);
+
     const [iconPreview, setIconPreview] = useState<string | null>(
         application.icon
             ? `/storage/${application.icon}`
@@ -131,42 +131,51 @@ export default function EditApplication({
         <>
             <Head title={`Modifier ${application.name}`} />
 
-            <div className="mx-auto max-w-4xl space-y-8">
-                <div className="flex items-start gap-4">
+            <div className="mx-auto w-full max-w-4xl px-6 py-8">
+                {/* Header */}
+                <div className="mb-10 flex items-start gap-4">
                     <Link
                         href="/admin/applications"
-                        className="mt-1 flex size-9 items-center justify-center rounded-lg border bg-background transition hover:bg-muted"
+                        className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-xl border bg-background transition hover:bg-muted"
                     >
                         <ArrowLeft className="size-4" />
                     </Link>
 
                     <div>
                         <p className="text-sm font-medium text-muted-foreground">
-                            Administration
+                            Administration / Applications
                         </p>
 
-                        <h1 className="mt-1 text-3xl font-semibold tracking-tight">
+                        <h1 className="mt-1 text-2xl font-semibold tracking-tight">
                             Modifier l'application
                         </h1>
 
-                        <p className="mt-2 text-muted-foreground">
-                            Modifiez les informations et les accès de cette
-                            application.
+                        <p className="mt-1 text-sm text-muted-foreground">
+                            Modifiez les informations et les accès de{' '}
+                            <span className="font-medium text-foreground">
+                                {application.name}
+                            </span>
+                            .
                         </p>
                     </div>
                 </div>
 
-                <form onSubmit={submit} className="space-y-6">
-                    <section className="rounded-xl border bg-card shadow-sm">
-                        <div className="border-b px-6 py-5">
-                            <h2 className="font-semibold">
+                <form onSubmit={submit} className="space-y-8">
+                    {/* Informations générales */}
+                    <section className="space-y-5">
+                        <div>
+                            <h2 className="text-lg font-semibold">
                                 Informations générales
                             </h2>
+
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                Les informations principales de l'application.
+                            </p>
                         </div>
 
-                        <div className="space-y-6 p-6">
-                            <div className="grid gap-6 md:grid-cols-[1fr_180px]">
-                                <div className="space-y-5">
+                        <div className="rounded-2xl border bg-background p-6 shadow-sm">
+                            <div className="grid gap-8 md:grid-cols-[1fr_180px]">
+                                <div className="space-y-6">
                                     <div className="space-y-2">
                                         <label
                                             htmlFor="name"
@@ -185,7 +194,7 @@ export default function EditApplication({
                                                     event.target.value,
                                                 )
                                             }
-                                            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                            className="h-11 w-full rounded-xl border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                                         />
 
                                         {errors.name && (
@@ -212,12 +221,13 @@ export default function EditApplication({
                                                     event.target.value,
                                                 )
                                             }
-                                            rows={4}
-                                            className="w-full resize-none rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                            rows={5}
+                                            className="w-full resize-none rounded-xl border bg-background px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                                         />
                                     </div>
                                 </div>
 
+                                {/* Icône */}
                                 <div className="space-y-2">
                                     <label
                                         htmlFor="icon"
@@ -228,20 +238,24 @@ export default function EditApplication({
 
                                     <label
                                         htmlFor="icon"
-                                        className="group flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed transition hover:border-primary hover:bg-muted/50"
+                                        className="group flex aspect-square cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed transition hover:border-primary hover:bg-muted/40"
                                     >
                                         {iconPreview ? (
                                             <img
                                                 src={iconPreview}
                                                 alt=""
-                                                className="size-24 rounded-xl object-contain"
+                                                className="size-24 rounded-2xl object-contain transition group-hover:scale-105"
                                             />
                                         ) : (
                                             <>
-                                                <ImagePlus className="size-9 text-muted-foreground" />
+                                                <ImagePlus className="size-9 text-muted-foreground transition group-hover:text-primary" />
 
                                                 <span className="mt-3 text-sm font-medium">
                                                     Choisir une icône
+                                                </span>
+
+                                                <span className="mt-1 text-xs text-muted-foreground">
+                                                    PNG, JPG, SVG...
                                                 </span>
                                             </>
                                         )}
@@ -275,7 +289,8 @@ export default function EditApplication({
                                 </div>
                             </div>
 
-                            <div className="grid gap-6 md:grid-cols-2">
+                            <div className="mt-8 grid gap-6 md:grid-cols-2">
+                                {/* URL */}
                                 <div className="space-y-2">
                                     <label
                                         htmlFor="url"
@@ -294,10 +309,11 @@ export default function EditApplication({
                                                 event.target.value,
                                             )
                                         }
-                                        className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                        className="h-11 w-full rounded-xl border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                                     />
                                 </div>
 
+                                {/* Catégorie */}
                                 <div className="space-y-2">
                                     <label
                                         htmlFor="category"
@@ -311,7 +327,7 @@ export default function EditApplication({
                                             id="category"
                                             value={data.category}
                                             onChange={handleCategoryChange}
-                                            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                            className="h-11 w-full rounded-xl border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                                         >
                                             <option value="">
                                                 Aucune catégorie
@@ -343,7 +359,7 @@ export default function EditApplication({
                                                 }
                                                 autoFocus
                                                 placeholder="Nouvelle catégorie"
-                                                className="h-10 min-w-0 flex-1 rounded-lg border bg-background px-3 text-sm"
+                                                className="h-11 min-w-0 flex-1 rounded-xl border bg-background px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                                             />
 
                                             <button
@@ -352,7 +368,7 @@ export default function EditApplication({
                                                     setNewCategory(false);
                                                     setData('category', '');
                                                 }}
-                                                className="rounded-lg border px-3 text-sm hover:bg-muted"
+                                                className="rounded-xl border px-3 text-sm transition hover:bg-muted"
                                             >
                                                 Annuler
                                             </button>
@@ -363,14 +379,19 @@ export default function EditApplication({
                         </div>
                     </section>
 
-                    <section className="rounded-xl border bg-card shadow-sm">
-                        <div className="border-b px-6 py-5">
-                            <h2 className="font-semibold">
+                    {/* Apparence */}
+                    <section className="space-y-5">
+                        <div>
+                            <h2 className="text-lg font-semibold">
                                 Apparence
                             </h2>
+
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                Choisissez la couleur de l'application.
+                            </p>
                         </div>
 
-                        <div className="space-y-5 p-6">
+                        <div className="rounded-2xl border bg-background p-6 shadow-sm">
                             <div className="flex items-center gap-4">
                                 <input
                                     type="color"
@@ -381,12 +402,12 @@ export default function EditApplication({
                                             event.target.value,
                                         )
                                     }
-                                    className="size-12 cursor-pointer rounded-lg border bg-background p-1"
+                                    className="size-12 cursor-pointer rounded-xl border bg-background p-1"
                                 />
 
                                 <div>
                                     <p className="text-sm font-medium">
-                                        Couleur
+                                        Couleur personnalisée
                                     </p>
 
                                     <p className="text-xs text-muted-foreground">
@@ -395,38 +416,50 @@ export default function EditApplication({
                                 </div>
                             </div>
 
-                            <div className="flex flex-wrap gap-3">
-                                {colors.map((color) => (
-                                    <button
-                                        key={color}
-                                        type="button"
-                                        onClick={() =>
-                                            setData('color', color)
-                                        }
-                                        className="flex size-9 items-center justify-center rounded-full border-2 border-transparent transition hover:scale-110"
-                                        style={{
-                                            backgroundColor: color,
-                                        }}
-                                    >
-                                        {data.color.toLowerCase() ===
-                                            color.toLowerCase() && (
-                                            <Check className="size-4 text-white" />
-                                        )}
-                                    </button>
-                                ))}
+                            <div className="mt-6">
+                                <p className="mb-3 text-sm font-medium">
+                                    Couleurs rapides
+                                </p>
+
+                                <div className="flex flex-wrap gap-3">
+                                    {colors.map((color) => (
+                                        <button
+                                            key={color}
+                                            type="button"
+                                            onClick={() =>
+                                                setData('color', color)
+                                            }
+                                            className="flex size-9 items-center justify-center rounded-full border-2 border-transparent transition hover:scale-110"
+                                            style={{
+                                                backgroundColor: color,
+                                            }}
+                                            title={color}
+                                        >
+                                            {data.color.toLowerCase() ===
+                                                color.toLowerCase() && (
+                                                <Check className="size-4 text-white" />
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </section>
 
-                    <section className="rounded-xl border bg-card shadow-sm">
-                        <div className="border-b px-6 py-5">
-                            <h2 className="font-semibold">
+                    {/* Paramètres */}
+                    <section className="space-y-5">
+                        <div>
+                            <h2 className="text-lg font-semibold">
                                 Paramètres
                             </h2>
+
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                Configurez le comportement de l'application.
+                            </p>
                         </div>
 
-                        <div className="grid gap-4 p-6 md:grid-cols-2">
-                            <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 hover:bg-muted/50">
+                        <div className="grid gap-4 md:grid-cols-2">
+                            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border bg-background p-5 shadow-sm transition hover:bg-muted/30">
                                 <input
                                     type="checkbox"
                                     checked={data.is_internal}
@@ -443,10 +476,15 @@ export default function EditApplication({
                                     <p className="text-sm font-medium">
                                         Application interne
                                     </p>
+
+                                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                                        Cette application est destinée à un
+                                        usage interne.
+                                    </p>
                                 </div>
                             </label>
 
-                            <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 hover:bg-muted/50">
+                            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border bg-background p-5 shadow-sm transition hover:bg-muted/30">
                                 <input
                                     type="checkbox"
                                     checked={data.is_active}
@@ -463,63 +501,83 @@ export default function EditApplication({
                                     <p className="text-sm font-medium">
                                         Application active
                                     </p>
+
+                                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                                        L'application est disponible pour les
+                                        utilisateurs autorisés.
+                                    </p>
                                 </div>
                             </label>
                         </div>
                     </section>
 
-                    <section className="rounded-xl border bg-card shadow-sm">
-                        <div className="border-b px-6 py-5">
-                            <h2 className="font-semibold">
+                    {/* Accès */}
+                    <section className="space-y-5">
+                        <div>
+                            <h2 className="text-lg font-semibold">
                                 Accès
                             </h2>
+
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                Sélectionnez les rôles autorisés à utiliser
+                                cette application.
+                            </p>
                         </div>
 
-                        <div className="p-6">
-                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                                {roles.map((role) => {
-                                    const selected =
-                                        data.roles.includes(role.id);
+                        <div className="rounded-2xl border bg-background p-6 shadow-sm">
+                            {roles.length === 0 ? (
+                                <div className="rounded-xl border border-dashed p-6 text-center">
+                                    <p className="text-sm text-muted-foreground">
+                                        Aucun rôle n'est disponible.
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                                    {roles.map((role) => {
+                                        const selected =
+                                            data.roles.includes(role.id);
 
-                                    return (
-                                        <button
-                                            key={role.id}
-                                            type="button"
-                                            onClick={() =>
-                                                toggleRole(role.id)
-                                            }
-                                            className={`flex items-center gap-3 rounded-lg border p-4 text-left transition ${
-                                                selected
-                                                    ? 'border-primary bg-primary/5'
-                                                    : 'hover:bg-muted/50'
-                                            }`}
-                                        >
-                                            <div
-                                                className={`flex size-5 items-center justify-center rounded border ${
+                                        return (
+                                            <button
+                                                key={role.id}
+                                                type="button"
+                                                onClick={() =>
+                                                    toggleRole(role.id)
+                                                }
+                                                className={`flex items-center gap-3 rounded-xl border p-4 text-left transition ${
                                                     selected
-                                                        ? 'border-primary bg-primary text-primary-foreground'
-                                                        : ''
+                                                        ? 'border-primary bg-primary/5'
+                                                        : 'hover:bg-muted/50'
                                                 }`}
                                             >
-                                                {selected && (
-                                                    <Check className="size-3.5" />
-                                                )}
-                                            </div>
+                                                <div
+                                                    className={`flex size-5 items-center justify-center rounded-md border ${
+                                                        selected
+                                                            ? 'border-primary bg-primary text-primary-foreground'
+                                                            : ''
+                                                    }`}
+                                                >
+                                                    {selected && (
+                                                        <Check className="size-3.5" />
+                                                    )}
+                                                </div>
 
-                                            <span className="text-sm font-medium">
-                                                {role.name}
-                                            </span>
-                                        </button>
-                                    );
-                                })}
-                            </div>
+                                                <span className="text-sm font-medium">
+                                                    {role.name}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
                     </section>
 
-                    <div className="flex justify-end gap-3 border-t pt-6">
+                    {/* Actions */}
+                    <div className="flex items-center justify-end gap-3 border-t pt-6">
                         <Link
                             href="/admin/applications"
-                            className="rounded-lg border px-4 py-2.5 text-sm font-medium hover:bg-muted"
+                            className="inline-flex h-10 items-center rounded-xl border px-4 text-sm font-medium transition hover:bg-muted"
                         >
                             Annuler
                         </Link>
@@ -527,9 +585,10 @@ export default function EditApplication({
                         <button
                             type="submit"
                             disabled={processing}
-                            className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground disabled:opacity-50"
+                            className="inline-flex h-10 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             <Check className="size-4" />
+
                             {processing
                                 ? 'Enregistrement...'
                                 : 'Enregistrer les modifications'}

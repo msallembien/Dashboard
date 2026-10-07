@@ -113,36 +113,37 @@ export default function CreateApplication({
         <>
             <Head title="Ajouter une application" />
 
-            <div className="mx-auto max-w-4xl space-y-8">
-                <div className="flex items-start gap-4">
+            <div className="mx-auto w-full max-w-4xl px-6 py-8">
+                {/* Header */}
+                <div className="mb-10 flex items-start gap-4">
                     <Link
                         href="/admin/applications"
-                        className="mt-1 flex size-9 items-center justify-center rounded-lg border bg-background transition hover:bg-muted"
+                        className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-xl border bg-background transition hover:bg-muted"
                     >
                         <ArrowLeft className="size-4" />
                     </Link>
 
                     <div>
                         <p className="text-sm font-medium text-muted-foreground">
-                            Administration
+                            Administration / Applications
                         </p>
 
-                        <h1 className="mt-1 text-3xl font-semibold tracking-tight">
+                        <h1 className="mt-1 text-2xl font-semibold tracking-tight">
                             Ajouter une application
                         </h1>
 
-                        <p className="mt-2 text-muted-foreground">
-                            Ajoutez une application et définissez les utilisateurs
-                            qui pourront y accéder.
+                        <p className="mt-1 text-sm text-muted-foreground">
+                            Ajoutez une application et définissez les
+                            utilisateurs qui pourront y accéder.
                         </p>
                     </div>
                 </div>
 
-                <form onSubmit={submit} className="space-y-6">
-                    {/* Informations */}
-                    <section className="rounded-xl border bg-card shadow-sm">
-                        <div className="border-b px-6 py-5">
-                            <h2 className="font-semibold">
+                <form onSubmit={submit} className="space-y-8">
+                    {/* Informations générales */}
+                    <section className="space-y-5">
+                        <div>
+                            <h2 className="text-lg font-semibold">
                                 Informations générales
                             </h2>
 
@@ -151,9 +152,9 @@ export default function CreateApplication({
                             </p>
                         </div>
 
-                        <div className="space-y-6 p-6">
-                            <div className="grid gap-6 md:grid-cols-[1fr_180px]">
-                                <div className="space-y-5">
+                        <div className="rounded-2xl border bg-background p-6 shadow-sm">
+                            <div className="grid gap-8 md:grid-cols-[1fr_180px]">
+                                <div className="space-y-6">
                                     <div className="space-y-2">
                                         <label
                                             htmlFor="name"
@@ -176,7 +177,7 @@ export default function CreateApplication({
                                                 )
                                             }
                                             placeholder="Ex. Microsoft Teams"
-                                            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                            className="h-11 w-full rounded-xl border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                                         />
 
                                         {errors.name && (
@@ -203,9 +204,9 @@ export default function CreateApplication({
                                                     event.target.value,
                                                 )
                                             }
-                                            rows={4}
+                                            rows={5}
                                             placeholder="Description de l'application..."
-                                            className="w-full resize-none rounded-lg border bg-background px-3 py-2 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                            className="w-full resize-none rounded-xl border bg-background px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                                         />
 
                                         {errors.description && (
@@ -218,19 +219,22 @@ export default function CreateApplication({
 
                                 {/* Icône */}
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium">
+                                    <label
+                                        htmlFor="icon"
+                                        className="text-sm font-medium"
+                                    >
                                         Icône
                                     </label>
 
                                     <label
                                         htmlFor="icon"
-                                        className="group flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed transition hover:border-primary hover:bg-muted/50"
+                                        className="group flex aspect-square cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed transition hover:border-primary hover:bg-muted/40"
                                     >
                                         {iconPreview ? (
                                             <img
                                                 src={iconPreview}
                                                 alt="Aperçu"
-                                                className="size-24 rounded-xl object-contain"
+                                                className="size-24 rounded-2xl object-contain transition group-hover:scale-105"
                                             />
                                         ) : (
                                             <>
@@ -240,7 +244,7 @@ export default function CreateApplication({
                                                     Choisir une icône
                                                 </span>
 
-                                                <span className="mt-1 text-center text-xs text-muted-foreground">
+                                                <span className="mt-1 text-xs text-muted-foreground">
                                                     PNG, JPG, SVG...
                                                 </span>
                                             </>
@@ -251,13 +255,13 @@ export default function CreateApplication({
                                             type="file"
                                             accept="image/*"
                                             className="hidden"
-                                            onChange={(event) => {
+                                            onChange={(event) =>
                                                 setData(
                                                     'icon',
                                                     event.target.files?.[0] ??
                                                         null,
-                                                );
-                                            }}
+                                                )
+                                            }
                                         />
                                     </label>
 
@@ -275,8 +279,8 @@ export default function CreateApplication({
                                 </div>
                             </div>
 
-                            {/* URL + catégorie */}
-                            <div className="grid gap-6 md:grid-cols-2">
+                            <div className="mt-8 grid gap-6 md:grid-cols-2">
+                                {/* URL */}
                                 <div className="space-y-2">
                                     <label
                                         htmlFor="url"
@@ -296,7 +300,7 @@ export default function CreateApplication({
                                             )
                                         }
                                         placeholder="https://..."
-                                        className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                        className="h-11 w-full rounded-xl border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                                     />
 
                                     {errors.url && (
@@ -306,6 +310,7 @@ export default function CreateApplication({
                                     )}
                                 </div>
 
+                                {/* Catégorie */}
                                 <div className="space-y-2">
                                     <label
                                         htmlFor="category"
@@ -319,7 +324,7 @@ export default function CreateApplication({
                                             id="category"
                                             value={data.category}
                                             onChange={handleCategoryChange}
-                                            className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                            className="h-11 w-full rounded-xl border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                                         >
                                             <option value="">
                                                 Choisir une catégorie
@@ -351,7 +356,7 @@ export default function CreateApplication({
                                                 }
                                                 placeholder="Nom de la nouvelle catégorie"
                                                 autoFocus
-                                                className="h-10 min-w-0 flex-1 rounded-lg border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                                className="h-11 min-w-0 flex-1 rounded-xl border bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                                             />
 
                                             <button
@@ -360,7 +365,7 @@ export default function CreateApplication({
                                                     setNewCategory(false);
                                                     setData('category', '');
                                                 }}
-                                                className="rounded-lg border px-3 text-sm hover:bg-muted"
+                                                className="rounded-xl border px-3 text-sm transition hover:bg-muted"
                                             >
                                                 Annuler
                                             </button>
@@ -377,20 +382,19 @@ export default function CreateApplication({
                         </div>
                     </section>
 
-                    {/* Couleur */}
-                    <section className="rounded-xl border bg-card shadow-sm">
-                        <div className="border-b px-6 py-5">
-                            <h2 className="font-semibold">
+                    {/* Apparence */}
+                    <section className="space-y-5">
+                        <div>
+                            <h2 className="text-lg font-semibold">
                                 Apparence
                             </h2>
 
                             <p className="mt-1 text-sm text-muted-foreground">
-                                Choisissez la couleur qui sera utilisée pour
-                                la carte de l'application.
+                                Choisissez la couleur de l'application.
                             </p>
                         </div>
 
-                        <div className="space-y-5 p-6">
+                        <div className="rounded-2xl border bg-background p-6 shadow-sm">
                             <div className="flex items-center gap-4">
                                 <input
                                     type="color"
@@ -401,7 +405,7 @@ export default function CreateApplication({
                                             event.target.value,
                                         )
                                     }
-                                    className="size-12 cursor-pointer rounded-lg border bg-background p-1"
+                                    className="size-12 cursor-pointer rounded-xl border bg-background p-1"
                                 />
 
                                 <div>
@@ -415,7 +419,7 @@ export default function CreateApplication({
                                 </div>
                             </div>
 
-                            <div>
+                            <div className="mt-6">
                                 <p className="mb-3 text-sm font-medium">
                                     Couleurs rapides
                                 </p>
@@ -444,13 +448,13 @@ export default function CreateApplication({
                             </div>
 
                             {/* Aperçu */}
-                            <div>
+                            <div className="mt-6">
                                 <p className="mb-3 text-sm font-medium">
                                     Aperçu
                                 </p>
 
                                 <div
-                                    className="flex w-48 flex-col items-center justify-center rounded-2xl p-6 shadow-sm"
+                                    className="flex w-44 flex-col items-center justify-center rounded-2xl p-6 shadow-sm"
                                     style={{
                                         backgroundColor: data.color,
                                     }}
@@ -478,7 +482,7 @@ export default function CreateApplication({
                             </div>
 
                             {errors.color && (
-                                <p className="text-sm text-destructive">
+                                <p className="mt-3 text-sm text-destructive">
                                     {errors.color}
                                 </p>
                             )}
@@ -486,9 +490,9 @@ export default function CreateApplication({
                     </section>
 
                     {/* Paramètres */}
-                    <section className="rounded-xl border bg-card shadow-sm">
-                        <div className="border-b px-6 py-5">
-                            <h2 className="font-semibold">
+                    <section className="space-y-5">
+                        <div>
+                            <h2 className="text-lg font-semibold">
                                 Paramètres
                             </h2>
 
@@ -497,8 +501,8 @@ export default function CreateApplication({
                             </p>
                         </div>
 
-                        <div className="grid gap-4 p-6 md:grid-cols-2">
-                            <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition hover:bg-muted/50">
+                        <div className="grid gap-4 md:grid-cols-2">
+                            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border bg-background p-5 shadow-sm transition hover:bg-muted/30">
                                 <input
                                     type="checkbox"
                                     checked={data.is_internal}
@@ -516,14 +520,14 @@ export default function CreateApplication({
                                         Application interne
                                     </p>
 
-                                    <p className="mt-1 text-xs text-muted-foreground">
+                                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
                                         Cette application est destinée à un
                                         usage interne.
                                     </p>
                                 </div>
                             </label>
 
-                            <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition hover:bg-muted/50">
+                            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border bg-background p-5 shadow-sm transition hover:bg-muted/30">
                                 <input
                                     type="checkbox"
                                     checked={data.is_active}
@@ -541,7 +545,7 @@ export default function CreateApplication({
                                         Application active
                                     </p>
 
-                                    <p className="mt-1 text-xs text-muted-foreground">
+                                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
                                         L'application sera disponible pour les
                                         utilisateurs autorisés.
                                     </p>
@@ -550,10 +554,10 @@ export default function CreateApplication({
                         </div>
                     </section>
 
-                    {/* Rôles */}
-                    <section className="rounded-xl border bg-card shadow-sm">
-                        <div className="border-b px-6 py-5">
-                            <h2 className="font-semibold">
+                    {/* Accès */}
+                    <section className="space-y-5">
+                        <div>
+                            <h2 className="text-lg font-semibold">
                                 Accès
                             </h2>
 
@@ -563,9 +567,9 @@ export default function CreateApplication({
                             </p>
                         </div>
 
-                        <div className="p-6">
+                        <div className="rounded-2xl border bg-background p-6 shadow-sm">
                             {roles.length === 0 ? (
-                                <div className="rounded-lg border border-dashed p-6 text-center">
+                                <div className="rounded-xl border border-dashed p-6 text-center">
                                     <p className="text-sm text-muted-foreground">
                                         Aucun rôle n'est disponible.
                                     </p>
@@ -583,14 +587,14 @@ export default function CreateApplication({
                                                 onClick={() =>
                                                     toggleRole(role.id)
                                                 }
-                                                className={`flex items-center gap-3 rounded-lg border p-4 text-left transition ${
+                                                className={`flex items-center gap-3 rounded-xl border p-4 text-left transition ${
                                                     selected
                                                         ? 'border-primary bg-primary/5'
                                                         : 'hover:bg-muted/50'
                                                 }`}
                                             >
                                                 <div
-                                                    className={`flex size-5 items-center justify-center rounded border ${
+                                                    className={`flex size-5 items-center justify-center rounded-md border ${
                                                         selected
                                                             ? 'border-primary bg-primary text-primary-foreground'
                                                             : ''
@@ -627,7 +631,7 @@ export default function CreateApplication({
                         <div className="flex gap-3">
                             <Link
                                 href="/admin/applications"
-                                className="inline-flex items-center rounded-lg border px-4 py-2.5 text-sm font-medium transition hover:bg-muted"
+                                className="inline-flex h-10 items-center rounded-xl border px-4 text-sm font-medium transition hover:bg-muted"
                             >
                                 Annuler
                             </Link>
@@ -635,13 +639,13 @@ export default function CreateApplication({
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                                className="inline-flex h-10 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                                <Plus className="size-4" />
+                                <Check className="size-4" />
 
                                 {processing
                                     ? 'Création...'
-                                    : "Créer l’application"}
+                                    : 'Créer l’application'}
                             </button>
                         </div>
                     </div>

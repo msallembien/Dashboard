@@ -28,58 +28,50 @@ export default function Home({ announcements, favorites }: HomeProps) {
         <>
             <Head title="Accueil" />
 
-            <div className="space-y-8">
-                <div>
-                    <h1 className="text-2xl font-semibold tracking-tight">
-                        Accueil
-                    </h1>
-                    <p className="text-muted-foreground">
-                        Retrouvez vos applications et les dernières annonces.
-                    </p>
-                </div>
-
-                <section className="space-y-3">
-                    <h2 className="text-lg font-semibold">Recherche</h2>
-
-                    <div className="relative max-w-xl">
-                        <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+            <div className="mx-auto flex w-full max-w-5xl flex-col items-center px-6 py-8">
+                {/* Recherche */}
+                <div className="w-full max-w-2xl">
+                    <div className="relative">
+                        <Search className="absolute top-1/2 left-4 size-5 -translate-y-1/2 text-muted-foreground" />
 
                         <Input
                             placeholder="Rechercher une application..."
-                            className="pl-9"
+                            className="h-12 rounded-xl border-muted-foreground/20 bg-background pl-11 text-sm shadow-sm"
                         />
                     </div>
-                </section>
+                </div>
 
-                <section className="space-y-3">
-                    <h2 className="text-lg font-semibold">Annonces</h2>
-
+                {/* Annonces */}
+                <section className="mt-16 w-full">
                     {announcements.length === 0 ? (
-                        <div className="rounded-lg border p-6 text-sm text-muted-foreground">
+                        <div className="text-center text-sm text-muted-foreground">
                             Aucune annonce pour le moment.
                         </div>
                     ) : (
-                        <div className="space-y-3">
+                        <div className="flex flex-col items-center gap-6">
                             {announcements.map((announcement) => (
                                 <article
                                     key={announcement.id}
-                                    className="rounded-lg border p-5"
+                                    className="w-full max-w-2xl rounded-2xl border bg-card p-7 shadow-sm"
                                 >
-                                    <h3 className="font-semibold">
-                                        {announcement.title}
-                                    </h3>
+                                    <div className="text-center">
+                                        <h2 className="text-lg font-semibold tracking-tight">
+                                            {announcement.title}
+                                        </h2>
 
-                                    <p className="mt-2 text-sm text-muted-foreground">
-                                        {announcement.content}
-                                    </p>
+                                        <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                                            {announcement.content}
+                                        </p>
+                                    </div>
                                 </article>
                             ))}
                         </div>
                     )}
                 </section>
 
-                <section className="space-y-3">
-                    <div className="flex items-center gap-2">
+                {/* Applications favorites */}
+                <section className="mt-16 w-full">
+                    <div className="mb-6 flex items-center gap-2">
                         <Star className="size-5" />
                         <h2 className="text-lg font-semibold">
                             Applications favorites
@@ -87,34 +79,42 @@ export default function Home({ announcements, favorites }: HomeProps) {
                     </div>
 
                     {favorites.length === 0 ? (
-                        <div className="rounded-lg border p-6 text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground">
                             Vous n'avez aucune application favorite.
-                        </div>
+                        </p>
                     ) : (
-                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="flex flex-wrap gap-3">
                             {favorites.map((application) => (
                                 <a
                                     key={application.id}
                                     href={application.url}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="rounded-lg border p-5 transition hover:bg-muted/50"
+                                    className="group flex items-center gap-3 rounded-xl px-4 py-3 transition hover:bg-muted"
                                 >
-                                    <h3 className="font-semibold">
+                                    {application.icon ? (
+                                        <img
+                                            src={
+                                                application.icon.startsWith(
+                                                    '/storage/',
+                                                )
+                                                    ? application.icon
+                                                    : `/storage/${application.icon}`
+                                            }
+                                            alt=""
+                                            className="size-10 rounded-lg object-contain transition group-hover:scale-105"
+                                        />
+                                    ) : (
+                                        <div className="flex size-10 items-center justify-center rounded-lg bg-muted text-sm font-semibold">
+                                            {application.name
+                                                .charAt(0)
+                                                .toUpperCase()}
+                                        </div>
+                                    )}
+
+                                    <span className="text-sm font-medium">
                                         {application.name}
-                                    </h3>
-
-                                    {application.description && (
-                                        <p className="mt-2 text-sm text-muted-foreground">
-                                            {application.description}
-                                        </p>
-                                    )}
-
-                                    {application.category && (
-                                        <span className="mt-4 inline-block text-xs text-muted-foreground">
-                                            {application.category}
-                                        </span>
-                                    )}
+                                    </span>
                                 </a>
                             ))}
                         </div>
